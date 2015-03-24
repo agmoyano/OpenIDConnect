@@ -1,0 +1,92 @@
+{
+  "requireCurlyBraces": [
+    "while",
+    "do",
+    "try",
+    "catch"
+  ],
+  "requireSpaceAfterKeywords": [
+    "else",
+    "while",
+    "do",
+    "return",
+    "try"
+  ],
+  "requireSpacesInFunctionExpression": {
+    "beforeOpeningCurlyBrace": true
+  },
+  "requireSpaceBeforeBlockStatements": true,
+  "requireSpacesInForStatement": true,
+  "disallowKeywords": [
+    "with"
+  ],
+  "requireLineFeedAtFileEnd": true,
+  "validateLineBreaks": "LF",
+  "requireSpaceAfterPrefixUnaryOperators": [
+    "++",
+    "--"
+  ],
+  "requireSpaceBetweenArguments": true,
+  "requireSpaceBeforePostfixUnaryOperators": [
+    "--"
+  ],
+  "requireSpaceBeforeBinaryOperators": [
+    "-",
+    "=",
+    "==",
+    "===",
+    "!==",
+    ">",
+    ">=",
+    "<="
+  ],
+  "requireSpaceAfterBinaryOperators": [
+    "-",
+    "=",
+    "==",
+    "===",
+    "!==",
+    ">",
+    ">=",
+    "<="
+  ],
+  "disallowSpaceBeforeBinaryOperators": [
+    "+",
+    "+",
+    "/",
+    "*",
+    "!=",
+    "<",
+    "<"
+  ],
+  "disallowPaddingNewlinesInBlocks": true,
+  "validateIndentation": 2,
+  "disallowSpaceAfterKeywords": [
+    "if",
+    "if",
+    "for",
+    "for",
+    "switch",
+    "switch",
+    "catch",
+    "catch"
+  ],
+  "disallowSpacesInConditionalExpression": {
+    "beforeAlternate": true
+  },
+  "disallowSpaceAfterBinaryOperators": [
+    "+",
+    "+",
+    "/",
+    "*",
+    "!=",
+    "<",
+    "<"
+  ],
+  "disallowSpacesInsideObjectBrackets": "all",
+  "disallowSpacesInsideArrayBrackets": "all",
+  "disallowSpaceBeforePostfixUnaryOperators": [
+    "++",
+    "++"
+  ]
+}
