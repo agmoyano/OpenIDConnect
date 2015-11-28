@@ -557,6 +557,7 @@ OpenIDConnect.prototype.auth = function() {
                                         user: req.session.user,
                                         sub: req.session.sub||req.session.user,
                                         code: token,
+                                        nonce: params.nonce,
                                         redirectUri: params.redirect_uri,
                                         responseType: params.response_type,
                                         status: 'created'
@@ -928,6 +929,7 @@ OpenIDConnect.prototype.token = function() {
                                     exp: d+3600,
                                     iat: d
                             };
+                            if(prev.auth.nonce) id_token.nonce = prev.auth.nonce;
                             req.model.access.create({
                                     token: access,
                                     type: 'Bearer',
