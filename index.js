@@ -212,7 +212,7 @@ function parse_authorization(authorization) {
     return [username, password];
 }
 
-function OpenIDConnect(options) {
+function OpenIDConnect(options, callback) {
     this.settings = extend(true, {}, defaults, options);
 
     //allow removing attributes, by marking thme as null
@@ -241,7 +241,7 @@ function OpenIDConnect(options) {
             connections: this.settings.connections,
             app: this.settings.app,
             policies: this.settings.policies
-        });
+        }, callback);
     }
 }
 
@@ -1170,8 +1170,8 @@ OpenIDConnect.prototype.removetokens = function() {
             ];
 };
 
-exports.oidc = function(options) {
-    return new OpenIDConnect(options);
+exports.oidc = function(options, callback) {
+    return new OpenIDConnect(options, callback);
 };
 
 exports.defaults = function() {
