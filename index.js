@@ -24,6 +24,8 @@ cleanObj = require('clean-obj');
 
 
 var defaults = {
+        accessTokenExpiresIn: 3600,//1 hour
+        refreshTokenExpiresIn: 5*3600,//5 hours
         login_url: '/login',
         consent_url: '/consent',
         iss: null,
@@ -585,7 +587,7 @@ OpenIDConnect.prototype.auth = function() {
                                         iss: self.settings.iss||req.protocol+'://'+req.headers.host,
                                         sub: req.session.sub||req.session.user,
                                         aud: params.client_id,
-                                        exp: d+3600,
+                                        exp: d+self.settings.accessTokenExpiresIn,
                                         iat: d,
                                         nonce: params.nonce
                                 }});
@@ -606,7 +608,7 @@ OpenIDConnect.prototype.auth = function() {
                                     var obj = {
                                             token: token,
                                             type: 'Bearer',
-                                            expiresIn: 3600,
+                                            expiresIn: self.settings.accessTokenExpiresIn,
                                             user: req.session.user,
                                             client: req.session.client_id,
                                             scope: params.scope.split(' ')
@@ -615,7 +617,7 @@ OpenIDConnect.prototype.auth = function() {
                                         if(!err && access) {
                                             setTimeout(function() {
                                                 access.destroy();
-                                            }, 1000*3600); //1 hour
+                                            }, 1000*obj.expiresIn);
 
                                             def.resolve({
                                                 access_token: obj.token,
@@ -918,20 +920,20 @@ OpenIDConnect.prototype.token = function() {
                                         }
                                     });
                                 }
-                            }, 1000*3600*5); //5 hours
+                            }, 1000*self.settings.refreshTokenExpiresIn);
 
                             var d = Math.round(new Date().getTime()/1000);
                             var id_token = {
                                     iss: self.settings.iss||req.protocol+'://'+req.headers.host,
                                     sub: prev.sub||prev.user||null,
                                     aud: prev.client.key,
-                                    exp: d+3600,
+                                    exp: d+self.settings.accessTokenExpiresIn,
                                     iat: d
                             };
                             req.model.access.create({
                                     token: access,
                                     type: 'Bearer',
-                                    expiresIn: 3600,
+                                    expiresIn: self.settings.accessTokenExpiresIn,
                                     user: prev.user||null,
                                     client: prev.client.id,
                                     idToken: jwt.encode(id_token, prev.client.secret),
@@ -957,7 +959,7 @@ OpenIDConnect.prototype.token = function() {
                                                 }
                                             });
                                         }
-                                    }, 1000*3600); //1 hour
+                                    }, 1000*access.expiresIn);
 
                                     res.json({
                                         access_token: access.token,
