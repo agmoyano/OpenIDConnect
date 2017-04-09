@@ -1080,22 +1080,34 @@ OpenIDConnect.prototype.check = function() {
 OpenIDConnect.prototype.userInfo = function() {
     var self = this;
     return [
-            self.check('openid', /profile|email/),
+            self.check('openid'),
             self.use({policies: {loggedIn: false}, models: ['access', 'user']}),
             function(req, res, next) {
                 req.model.access.findOne({token: req.parsedParams.access_token})
                 .exec(function(err, access) {
                     if(!err && access) {
                         req.model.user.findOne({id: access.user}, function(err, user) {
-                            if(req.check.scopes.indexOf('profile') != -1) {
-                                user.sub = req.session.sub||req.session.user;
+                            // 2.3.2. "The sub (subject) Claim MUST always be returned in the UserInfo Response."
+                            if(typeof user.sub === 'function') {
+                                user.sub = user.sub();
+                            }
+                            if(req.check.scopes.indexOf('profile') !== -1) {
                                 delete user.id;
                                 delete user.password;
                                 delete user.openidProvider;
-                                res.json(user);
-                            } else {
-                                res.json({email: user.email});
                             }
+                            else {
+                                user = {
+                                    sub: user.sub,
+                                    email: user.email,
+                                    email_verified: user.email_verified,
+                                };
+                            }
+                            if(req.check.scopes.indexOf('email') === -1) {
+                                delete user.email;
+                                delete user.email_verified;
+                            }
+                            res.json(user);
                         });
                     } else {
                         self.errorHandle(res, null, 'unauthorized_client', 'Access token is not valid.');
