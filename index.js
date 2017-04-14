@@ -40,7 +40,7 @@ var defaults = {
                 if(req.session.user) {
                     next();
                 } else {
-                    var q = req.parsedParams?req.path+'?'+querystring.stringify(req.parsedParams):req.originalUrl;
+                    var q = req.parsedParams?req.baseUrl+req.path+'?'+querystring.stringify(req.parsedParams):req.originalUrl;
                     res.redirect(this.settings.login_url+'?'+querystring.stringify({return_url: q}));
                 }
             },
@@ -516,7 +516,7 @@ OpenIDConnect.prototype.auth = function() {
                                 }
                                 if(redirect) {
                                     req.session.client_key = params.client_id;
-                                    var q = req.path+'?'+querystring.stringify(params);
+                                    var q = req.baseUrl+req.path+'?'+querystring.stringify(params);
                                     deferred.reject({type: 'redirect', uri: self.settings.consent_url+'?'+querystring.stringify({return_url: q})});
                                 } else {
                                     deferred.resolve(params);
